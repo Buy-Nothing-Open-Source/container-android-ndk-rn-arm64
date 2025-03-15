@@ -1,0 +1,45 @@
+diff --git a/API/hermes/cdp/DomainState.cpp b/API/hermes/cdp/DomainState.cpp
+index cfdd816e8..ee0875ba3 100644
+--- a/API/hermes/cdp/DomainState.cpp
++++ b/API/hermes/cdp/DomainState.cpp
+@@ -5,6 +5,8 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
++#include <string>
++
+ #include "DomainState.h"
+ 
+ #include <cassert>
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4373048de..60efdebb8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -253,7 +253,7 @@ set(HERMES_USE_FLOWPARSER OFF CACHE BOOL
+ set(HERMES_ENABLE_WERROR OFF CACHE BOOL
+   "Whether the build should have -Werror enabled")
+ 
+-set(HERMES_THREAD_SAFETY_ANALYSIS ON CACHE BOOL
++set(HERMES_THREAD_SAFETY_ANALYSIS OFF CACHE BOOL
+   "Whether to compile with clang's -Wthread-safety")
+ 
+ set(HERMES_ENABLE_WIN10_ICU_FALLBACK ON CACHE BOOL
+diff --git a/external/llvh/lib/Support/raw_ostream.cpp b/external/llvh/lib/Support/raw_ostream.cpp
+index 7873384e5..40a87c180 100644
+--- a/external/llvh/lib/Support/raw_ostream.cpp
++++ b/external/llvh/lib/Support/raw_ostream.cpp
+@@ -64,6 +64,14 @@
+ #include "Windows/WindowsSupport.h"
+ #endif
+ 
++#ifdef HAVE_LSEEK64
++#ifndef lseek64
++off_t lseek64(int fd, off_t offset, int whence) {
++  return lseek(fd, offset, whence);
++}
++#endif
++#endif
++
+ using namespace llvh;
+ 
+ raw_ostream::~raw_ostream() {
